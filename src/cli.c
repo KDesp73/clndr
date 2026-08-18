@@ -17,6 +17,7 @@ void context_init(Context* ctx, Command command)
 {
     context_reset(ctx);
     ctx->command = command;
+    strncpy(ctx->date.fmt, "%Y/%m/%d", sizeof(ctx->date.fmt) - 1);
 }
 
 void context_reset(Context* ctx)
