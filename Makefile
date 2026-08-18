@@ -10,7 +10,7 @@ BUILD_DIR = build
 DIST_DIR = dist
 
 # Target and version info
-TARGET = calendar
+TARGET = clndr
 version_file = include/version.h
 VERSION_MAJOR = $(shell sed -n -e 's/\#define VERSION_MAJOR \([0-9]*\)/\1/p' $(version_file))
 VERSION_MINOR = $(shell sed -n -e 's/\#define VERSION_MINOR \([0-9]*\)/\1/p' $(version_file))
@@ -67,8 +67,8 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c ## Compile source files with progress
 
 .PHONY: install
 install: all ## Install the executable to /usr/bin/
-	@echo "[INFO] Installing $(TARGET) to /usr/bin/"
-	cp $(TARGET) /usr/bin/$(TARGET)
+	@echo "[INFO] Installing $(TARGET) to /usr/local/bin/"
+	cp $(TARGET) /usr/local/bin/$(TARGET)
 
 .PHONY: uninstall
 uninstall: ## Remove the executable from /usr/bin/
