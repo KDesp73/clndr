@@ -6,16 +6,6 @@
 #include <stddef.h>
 
 typedef enum {
-    COMMAND_MONTH,
-    COMMAND_UNTIL,
-    COMMAND_TODAY,
-    COMMAND_LEAP,
-    COMMAND_NONE,
-} Command;
-#define COMMAND_COUNT COMMAND_NONE
-Command parse_command(const char* str);
-
-typedef enum {
    ARG_HELP = 'h',
    ARG_VERSION = 'v',
    ARG_DAY = 'D',
@@ -28,19 +18,28 @@ typedef enum {
 } CliArgs;
 
 typedef struct {
-    Command command;
+    const char* command;
     Date date;
     bool human;
 } Context;
-void context_init(Context* ctx, Command command);
+void context_init(Context* ctx, const char* command);
 void context_reset(Context* ctx);
 void context_free(Context* ctx);
 
 typedef bool (*HandlerFunc)(Context);
+
+#define MAX_COMMANDS 32
 typedef struct {
-   HandlerFunc table[COMMAND_COUNT];
+    const char* name;
+    HandlerFunc handler;
+} CommandEntry;
+
+typedef struct {
+    CommandEntry table[MAX_COMMANDS];
+    size_t count;
 } Dispatcher;
-void set_handler(Dispatcher* this, Command command, HandlerFunc handler);
-HandlerFunc get_handler(Dispatcher* this, Command command);
+void dispatcher_init(Dispatcher* d);
+void dispatcher_add(Dispatcher* d, const char* name, HandlerFunc handler);
+HandlerFunc dispatcher_find(Dispatcher* d, const char* name);
 
 #endif // CLI_CONFIG_H

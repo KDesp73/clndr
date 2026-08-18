@@ -3,19 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-Command parse_command(const char* str)
-{
-    if(!str) return COMMAND_NONE;
-
-    if(!strcmp("month", str)) return COMMAND_MONTH;
-    if(!strcmp("today", str)) return COMMAND_TODAY;
-    if(!strcmp("leap", str)) return COMMAND_LEAP;
-    else if(!strcmp("until", str)) return COMMAND_UNTIL;
-
-    return COMMAND_NONE;
-}
-
-void context_init(Context* ctx, Command command)
+void context_init(Context* ctx, const char* command)
 {
     context_reset(ctx);
     ctx->command = command;
@@ -25,7 +13,7 @@ void context_init(Context* ctx, Command command)
 void context_reset(Context* ctx)
 {
     context_free(ctx);
-    ctx->command = COMMAND_NONE;
+    ctx->command = NULL;
 }
 
 void context_free(Context* ctx)
@@ -33,13 +21,24 @@ void context_free(Context* ctx)
     if(!ctx) return;
 }
 
-void set_handler(Dispatcher* this, Command command, HandlerFunc handler)
+void dispatcher_init(Dispatcher* d)
 {
-    this->table[command] = handler;
+    d->count = 0;
 }
 
-HandlerFunc get_handler(Dispatcher* this, Command command)
+void dispatcher_add(Dispatcher* d, const char* name, HandlerFunc handler)
 {
-    if(command == COMMAND_NONE) return NULL;
-    return this->table[command];
+    d->table[d->count].name = name;
+    d->table[d->count].handler = handler;
+    d->count++;
+}
+
+HandlerFunc dispatcher_find(Dispatcher* d, const char* name)
+{
+    if(!name) return NULL;
+    for(size_t i = 0; i < d->count; ++i) {
+        if(!strcmp(d->table[i].name, name))
+            return d->table[i].handler;
+    }
+    return NULL;
 }

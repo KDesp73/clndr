@@ -124,10 +124,9 @@ int main(int argc, char** argv)
         NULL
     );
     char* command_str = argc == 1 ? NULL : argv[1];
-    Command command = parse_command(command_str);
 
     Context ctx = {0};
-    context_init(&ctx, command);
+    context_init(&ctx, command_str);
 
     char* date_input = NULL;
     int opt;
@@ -171,12 +170,12 @@ int main(int argc, char** argv)
     }
 
     Dispatcher dispatcher = {0};
-    set_handler(&dispatcher, COMMAND_MONTH, month_handler);
-    set_handler(&dispatcher, COMMAND_UNTIL, until_handler);
-    set_handler(&dispatcher, COMMAND_TODAY, today_handler);
-    set_handler(&dispatcher, COMMAND_LEAP, leap_handler);
+    dispatcher_init(&dispatcher);
+#define COMMAND(cmd, h) dispatcher_add(&dispatcher, #cmd, h);
+#include "commands.inc"
+#undef COMMAND
 
-    HandlerFunc handler = get_handler(&dispatcher, command);
+    HandlerFunc handler = dispatcher_find(&dispatcher, command_str);
     if(!handler) {
         if(!command_str) ERRO("Please provide a command");
         else ERRO("Unknown command: `%s`", command_str);
