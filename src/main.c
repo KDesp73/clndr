@@ -28,6 +28,40 @@ bool month_handler(Context ctx)
     return true;
 }
 
+bool until_handler(Context ctx)
+{
+    if(!is_valid_day(ctx.date.day)) {
+        ERRO("Invalid day: %zu", ctx.date.day);
+        return false;
+    }
+    if(!is_valid_month(ctx.date.month)) {
+        ERRO("Invalid month: %zu", ctx.date.month);
+        return false;
+    }
+    if(!is_valid_year(ctx.date.year)) {
+        ERRO("Invalid year: %zu", ctx.date.year);
+        return false;
+    }
+
+    Date today = {0};
+    date_today(&today);
+
+    int diff = days_between(today, ctx.date);
+
+    if(diff > 0) {
+        printf("%d days until ", diff);
+        date_print(ctx.date);
+    } else if(diff < 0) {
+        printf("%d days since ", -diff);
+        date_print(ctx.date);
+    } else {
+        printf("Today is ");
+        date_print(ctx.date);
+    }
+
+    return true;
+}
+
 int main(int argc, char** argv)
 {
     cli_args_t args = cli_args_make(
@@ -50,6 +84,7 @@ int main(int argc, char** argv)
     Context ctx = {0};
     context_init(&ctx, command);
 
+    char* date_input = NULL;
     int opt;
     LOOP_ARGS(opt, args) {
         switch (opt) {
@@ -72,7 +107,7 @@ int main(int argc, char** argv)
                 strncpy(ctx.date.fmt, optarg, sizeof(ctx.date.fmt) - 1);
                 break;
             case ARG_DATE:
-                date_parse(&ctx.date, optarg, ctx.date.fmt);
+                date_input = optarg;
                 strncpy(ctx.date.date, optarg, sizeof(ctx.date.date) - 1);
                 break;
             case ARG_TODAY:
@@ -83,8 +118,13 @@ int main(int argc, char** argv)
         }
     }
 
+    if(date_input) {
+        date_parse(&ctx.date, date_input, ctx.date.fmt);
+    }
+
     Dispatcher dispatcher = {0};
     set_handler(&dispatcher, COMMAND_MONTH, month_handler);
+    set_handler(&dispatcher, COMMAND_UNTIL, until_handler);
 
     HandlerFunc handler = get_handler(&dispatcher, command);
     if(!handler) {

@@ -114,6 +114,19 @@ void date_parse(Date* date, char* input, char* fmt)
     }
 }
 
+static long date_to_jdn(Date d)
+{
+    int a = ((int)d.month - 14) / 12;
+    int y = (int)d.year + 4800 - a;
+    int m = (int)d.month + 12 * a - 3;
+    return (int)d.day + (153 * m + 2) / 5 + 365L * y + y / 4 - y / 100 + y / 400 - 32045;
+}
+
+int days_between(Date from, Date to)
+{
+    return (int)(date_to_jdn(to) - date_to_jdn(from));
+}
+
 #include <time.h>
 
 void date_today(Date* date)

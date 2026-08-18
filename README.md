@@ -1,6 +1,6 @@
 # calendar
 
-## API
+## CLI
 
 ```bash
 calendar month --today

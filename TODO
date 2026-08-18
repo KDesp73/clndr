@@ -1,4 +1,4 @@
-TODO: Until command [Count days until a specified date]
+DONE: Until command [Count days until a specified date]
 TODO: Year command [Print a full 12-month calendar for a given year]
 TODO: Week command [Print the calendar for the current/target week]
 TODO: Next command [Shift the displayed month forward by N months]

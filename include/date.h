@@ -85,5 +85,6 @@ void date_parse(Date* date, char* input, char* fmt);
 Weekday date_weekday(Date date);
 void month_print(FILE* stream, Date date, bool highlight_day);
 void date_today(Date* date);
+int days_between(Date from, Date to);
 
 #endif // DATE_H
