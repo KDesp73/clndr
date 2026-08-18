@@ -73,7 +73,7 @@ install: all ## Install the executable to /usr/bin/
 .PHONY: uninstall
 uninstall: ## Remove the executable from /usr/bin/
 	@echo "[INFO] Uninstalling $(TARGET)"
-	rm -f /usr/bin/$(TARGET)
+	rm -f /usr/local/bin/$(TARGET)
 
 .PHONY: clean
 clean: ## Remove all build files and the executable
