@@ -9,6 +9,14 @@
 #include "cli.h"
 #include <stdio.h>
 
+bool cmds_handler(Context ctx)
+{
+#define COMMAND(cmd, _) printf("%s\n", #cmd);
+#include "commands.inc"
+#undef COMMANDS
+    return true;
+}
+
 bool leap_handler(Context ctx)
 {
     if(!is_valid_year(ctx.date.year)) {
