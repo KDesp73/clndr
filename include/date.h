@@ -14,7 +14,7 @@ typedef struct {
 } Date;
 
 #define DATEFMT "%zu/%zu/%zu"
-#define DATEARGS(date) (date).day, (date).month, (date).year
+#define DATEARGS(date) (date).year, (date).month, (date).day
 
 typedef enum {
     JANUARY = 1,
