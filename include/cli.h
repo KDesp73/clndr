@@ -8,6 +8,8 @@
 typedef enum {
     COMMAND_MONTH,
     COMMAND_UNTIL,
+    COMMAND_TODAY,
+    COMMAND_LEAP,
     COMMAND_NONE,
 } Command;
 #define COMMAND_COUNT COMMAND_NONE

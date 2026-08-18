@@ -8,6 +8,8 @@ Command parse_command(const char* str)
     if(!str) return COMMAND_NONE;
 
     if(!strcmp("month", str)) return COMMAND_MONTH;
+    if(!strcmp("today", str)) return COMMAND_TODAY;
+    if(!strcmp("leap", str)) return COMMAND_LEAP;
     else if(!strcmp("until", str)) return COMMAND_UNTIL;
 
     return COMMAND_NONE;

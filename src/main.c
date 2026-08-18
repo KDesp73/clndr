@@ -9,6 +9,32 @@
 #include "cli.h"
 #include <stdio.h>
 
+bool leap_handler(Context ctx)
+{
+    if(!is_valid_year(ctx.date.year)) {
+        ERRO("Invalid year: %zu", ctx.date.year);
+        return false;
+    }
+
+    bool is_leap = is_leap_year(ctx.date.year);
+
+    printf("%s\n", is_leap ? "true" : "false");
+
+    return true;
+}
+
+bool today_handler(Context ctx)
+{
+    (void) ctx;
+
+    Date date = {0};
+    date_today(&date);
+    Weekday weekday = date_weekday(date);
+
+    printf("Today is "DATEFMT" and it's a %s\n", DATEARGS(date), weekday_name(weekday));
+    return true;
+}
+
 bool month_handler(Context ctx)
 {
     if(!is_valid_day(ctx.date.day)) {
@@ -125,6 +151,8 @@ int main(int argc, char** argv)
     Dispatcher dispatcher = {0};
     set_handler(&dispatcher, COMMAND_MONTH, month_handler);
     set_handler(&dispatcher, COMMAND_UNTIL, until_handler);
+    set_handler(&dispatcher, COMMAND_TODAY, today_handler);
+    set_handler(&dispatcher, COMMAND_LEAP, leap_handler);
 
     HandlerFunc handler = get_handler(&dispatcher, command);
     if(!handler) {
