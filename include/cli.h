@@ -24,11 +24,13 @@ typedef enum {
    ARG_DATE = 'd',
    ARG_FMT = 'f',
    ARG_TODAY = 'T',
+   ARG_HUMAN = 'H',
 } CliArgs;
 
 typedef struct {
     Command command;
     Date date;
+    bool human;
 } Context;
 void context_init(Context* ctx, Command command);
 void context_reset(Context* ctx);

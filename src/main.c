@@ -18,7 +18,11 @@ bool leap_handler(Context ctx)
 
     bool is_leap = is_leap_year(ctx.date.year);
 
-    printf("%s\n", is_leap ? "true" : "false");
+    if(ctx.human) {
+        printf("%zu is %sa leap year\n", ctx.date.year, is_leap ? "" : "not ");
+    } else {
+        printf("%s\n", is_leap ? "true" : "false");
+    }
 
     return true;
 }
@@ -31,7 +35,11 @@ bool today_handler(Context ctx)
     date_today(&date);
     Weekday weekday = date_weekday(date);
 
-    printf("Today is "DATEFMT" and it's a %s\n", DATEARGS(date), weekday_name(weekday));
+    if(ctx.human) {
+        printf("Today is "DATEFMT" and it's a %s\n", DATEARGS(date), weekday_name(weekday));
+    } else {
+        printf(DATEFMT" %s\n", DATEARGS(date), weekday_name(weekday));
+    }
     return true;
 }
 
@@ -74,15 +82,25 @@ bool until_handler(Context ctx)
 
     int diff = days_between(today, ctx.date);
 
-    if(diff > 0) {
-        printf("%d days until ", diff);
-        date_print(ctx.date);
-    } else if(diff < 0) {
-        printf("%d days since ", -diff);
-        date_print(ctx.date);
+    if(ctx.human) {
+        if(diff > 0) {
+            printf("%d days until ", diff);
+            date_print(ctx.date);
+        } else if(diff < 0) {
+            printf("%d days since ", -diff);
+            date_print(ctx.date);
+        } else {
+            printf("Today is ");
+            date_print(ctx.date);
+        }
     } else {
-        printf("Today is ");
-        date_print(ctx.date);
+        if(diff > 0) {
+            printf("%d "DATEFMT"\n", diff, DATEARGS(ctx.date));
+        } else if(diff < 0) {
+            printf("%d "DATEFMT"\n", diff, DATEARGS(ctx.date));
+        } else {
+            printf("0 "DATEFMT"\n", DATEARGS(ctx.date));
+        }
     }
 
     return true;
@@ -102,6 +120,7 @@ int main(int argc, char** argv)
         cli_arg_new(ARG_FMT, "fmt", "Specify the date format (default: \%Y/\%m/\%d)", required_argument),
 
         cli_arg_new(ARG_TODAY, "today", "Use the current date", no_argument),
+        cli_arg_new(ARG_HUMAN, "human", "Human readable output", no_argument),
         NULL
     );
     char* command_str = argc == 1 ? NULL : argv[1];
@@ -138,6 +157,9 @@ int main(int argc, char** argv)
                 break;
             case ARG_TODAY:
                 date_today(&ctx.date);
+                break;
+            case ARG_HUMAN:
+                ctx.human = true;
                 break;
             default:
                 break;
