@@ -13,7 +13,7 @@ bool cmds_handler(Context ctx)
 {
 #define COMMAND(cmd, _) printf("%s\n", #cmd);
 #include "commands.inc"
-#undef COMMANDS
+#undef COMMAND
     return true;
 }
 
@@ -67,6 +67,23 @@ bool month_handler(Context ctx)
     }
 
     month_print(stdout, ctx.date, true);
+    return true;
+}
+
+bool year_handler(Context ctx)
+{
+    if(!is_valid_year(ctx.date.year)) {
+        ERRO("Invalid year: %zu", ctx.date.year);
+        return false;
+    }
+
+    printf("%zu\n", ctx.date.year);
+    for(size_t m = JANUARY; m <= DECEMBER; ++m) {
+        Date d = { .day = 1, .month = m, .year = ctx.date.year };
+        month_print(stdout, d, false);
+        printf("\n");
+    }
+
     return true;
 }
 
