@@ -127,6 +127,20 @@ int days_between(Date from, Date to)
     return (int)(date_to_jdn(to) - date_to_jdn(from));
 }
 
+void date_add_months(Date* date, int months)
+{
+    int m = (int)date->month - 1 + months;
+    int y = (int)date->year + m / 12;
+    m = m % 12;
+    if(m < 0) { m += 12; y--; }
+
+    date->month = (size_t)(m + 1);
+    date->year = (size_t)y;
+
+    size_t max_day = month_days(date->year, (Month)date->month);
+    if(date->day > max_day) date->day = max_day;
+}
+
 #include <time.h>
 
 void date_today(Date* date)

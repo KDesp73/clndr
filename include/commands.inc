@@ -1,4 +1,6 @@
 COMMAND(month, month_handler)
+COMMAND(next,  next_handler)
+COMMAND(prev,  prev_handler)
 COMMAND(until, until_handler)
 COMMAND(today, today_handler)
 COMMAND(leap,  leap_handler)

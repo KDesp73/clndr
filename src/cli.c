@@ -7,6 +7,7 @@ void context_init(Context* ctx, const char* command)
 {
     context_reset(ctx);
     ctx->command = command;
+    ctx->count = 1;
     strncpy(ctx->date.fmt, "%Y/%m/%d", sizeof(ctx->date.fmt) - 1);
 }
 

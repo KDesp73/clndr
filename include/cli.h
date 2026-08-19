@@ -21,6 +21,7 @@ typedef struct {
     const char* command;
     Date date;
     bool human;
+    size_t count;
 } Context;
 void context_init(Context* ctx, const char* command);
 void context_reset(Context* ctx);

@@ -17,6 +17,24 @@ bool cmds_handler(Context ctx)
     return true;
 }
 
+bool next_handler(Context ctx)
+{
+    if(ctx.date.year == 0) date_today(&ctx.date);
+
+    date_add_months(&ctx.date, (int)ctx.count);
+    month_print(stdout, ctx.date, true);
+    return true;
+}
+
+bool prev_handler(Context ctx)
+{
+    if(ctx.date.year == 0) date_today(&ctx.date);
+
+    date_add_months(&ctx.date, -(int)ctx.count);
+    month_print(stdout, ctx.date, true);
+    return true;
+}
+
 bool leap_handler(Context ctx)
 {
     if(!is_valid_year(ctx.date.year)) {
@@ -152,6 +170,15 @@ int main(int argc, char** argv)
 
     Context ctx = {0};
     context_init(&ctx, command_str);
+
+    if(argc > 2 && argv[2][0] != '-') {
+        char* end = NULL;
+        long val = strtol(argv[2], &end, 10);
+        if(end != argv[2] && *end == '\0' && val > 0) {
+            ctx.count = (size_t)val;
+            optind = 3;
+        }
+    }
 
     char* date_input = NULL;
     int opt;

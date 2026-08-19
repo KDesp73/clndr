@@ -86,5 +86,6 @@ Weekday date_weekday(Date date);
 void month_print(FILE* stream, Date date, bool highlight_day);
 void date_today(Date* date);
 int days_between(Date from, Date to);
+void date_add_months(Date* date, int months);
 
 #endif // DATE_H
