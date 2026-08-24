@@ -54,7 +54,7 @@ clndr today
 
 ## License
 
-This project does not currently include a license file. All rights reserved by the author.
+[MIT](./LICENSE)
 
 ---
 
